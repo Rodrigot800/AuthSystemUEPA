@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 from src.auth import autenticar_cliente
 
-import keyboard  # pip install keyboard
+from src.hardware import bloquear_teclas
+
+
 
 def iniciar_tela_login():
     janela = tk.Tk()
@@ -16,33 +18,35 @@ def iniciar_tela_login():
     janela.attributes("-topmost", True)         # Sempre no topo
     janela.config(bg="#f5f6fa")
 
-    # ---------- BLOQUEIOS ----------
-    janela.protocol("WM_DELETE_WINDOW", lambda: None)
-    janela.bind("<Alt-F4>", lambda e: "break")
+    bloquear_teclas()
 
-    def bloquear_teclas(event):
-       return "break"
+    # # ---------- BLOQUEIOS ----------
+    # janela.protocol("WM_DELETE_WINDOW", lambda: None)
+    # janela.bind("<Alt-F4>", lambda e: "break")
 
-    teclas_para_bloquear = [
-        "<Escape>", "<Shift_L>", "<Shift_R>",
-        "<Control_L>", "<Control_R>", "<Alt_L>", "<Alt_R>",
-        "<F1>", "<F2>", "<F3>", "<F4>", "<F5>", "<F6>",
-        "<F7>", "<F8>", "<F9>", "<F10>", "<F11>", "<F12>"
-    ]
+    # def bloquear_teclas(event):
+    #    return "break"
 
-    for tecla in teclas_para_bloquear:
-        janela.bind_all(tecla, bloquear_teclas)
+    # teclas_para_bloquear = [
+    #     "<Escape>", "<Shift_L>", "<Shift_R>",
+    #     "<Control_L>", "<Control_R>", "<Alt_L>", "<Alt_R>",
+    #     "<F1>", "<F2>", "<F3>", "<F4>", "<F5>", "<F6>",
+    #     "<F7>", "<F8>", "<F9>", "<F10>", "<F11>", "<F12>"
+    # ]
+
+    # for tecla in teclas_para_bloquear:
+    #     janela.bind_all(tecla, bloquear_teclas)
 
     # Bloqueia as teclas Windows esquerda e direita
-    keyboard.block_key("windows")
-    keyboard.block_key("left windows")
-    keyboard.block_key("right windows")
+    # keyboard.block_key("windows")
+    # keyboard.block_key("left windows")
+    # keyboard.block_key("right windows")
 
     # Bloqueia combinações comuns como Win+R
-    keyboard.add_hotkey('windows+r', lambda: None)
-    keyboard.add_hotkey('windows+e', lambda: None)
-    keyboard.add_hotkey('windows+d', lambda: None)
-    keyboard.add_hotkey('windows+tab', lambda: None)
+    # keyboard.add_hotkey('windows+r', lambda: None)
+    # keyboard.add_hotkey('windows+e', lambda: None)
+    # keyboard.add_hotkey('windows+d', lambda: None)
+    # keyboard.add_hotkey('windows+tab', lambda: None)
 
     # Bloqueia Esc, Shift, Ctrl, F1-F12
     # teclas = [
@@ -87,6 +91,13 @@ def iniciar_tela_login():
             janela.destroy()
         else:
             messagebox.showerror("Erro", "❌ Usuário ou senha incorretos.")
+
+        if autenticar_cliente(usuario, senha):
+            messagebox.showinfo("Sucesso", "✅ Acesso permitido!")
+        
+            from src.ui_sair import iniciar_tela_sair
+            iniciar_tela_sair(usuario)
+
 
     botao_login = tk.Button(
         janela,
