@@ -21,7 +21,7 @@ def iniciar_tela_login():
     janela.bind("<Alt-F4>", lambda e: "break")
 
     def bloquear_teclas(event):
-        return "break"
+       return "break"
 
     teclas_para_bloquear = [
         "<Escape>", "<Shift_L>", "<Shift_R>",
@@ -45,13 +45,13 @@ def iniciar_tela_login():
     keyboard.add_hotkey('windows+tab', lambda: None)
 
     # Bloqueia Esc, Shift, Ctrl, F1-F12
-    teclas = [
-        "esc", "ctrl", "alt",
-        "f1", "f2", "f3", "f4", "f5", "f6",
-        "f7", "f8", "f9", "f10", "f11", "f12"
-    ]
-    for tecla in teclas:
-        keyboard.block_key(tecla)
+    # teclas = [
+    #     "esc", "ctrl", "alt",
+    #     "f1", "f2", "f3", "f4", "f5", "f6",
+    #     "f7", "f8", "f9", "f10", "f11", "f12"
+    # ]
+    # for tecla in teclas:
+    #     keyboard.block_key(tecla)
     # ---------- INTERFACE ----------
     titulo = tk.Label(
         janela,
