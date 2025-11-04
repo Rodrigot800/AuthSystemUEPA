@@ -5,12 +5,13 @@ from tkinter import messagebox
 
 
 def iniciar_tela_sair(usuario):
-    # 🪟 Janela principal
+    #  Janela principal
     janela = tk.Tk()
     janela.title("Sessão Ativa - UEPA")
     janela.geometry("300x180")
     janela.config(bg="#f5f6fa")
     janela.resizable(False, False)
+    janela.protocol("WM_DELETE_WINDOW", lambda: None)
 
     # 🔓 Libera teclas bloqueadas
     desbloquear_teclas()

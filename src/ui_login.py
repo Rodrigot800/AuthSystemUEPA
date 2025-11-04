@@ -20,9 +20,8 @@ def iniciar_tela_login():
 
     bloquear_teclas()
 
-    # # ---------- BLOQUEIOS ----------
-    # janela.protocol("WM_DELETE_WINDOW", lambda: None)
-    # janela.bind("<Alt-F4>", lambda e: "break")
+     # ---------- BLOQUEIOS ----------
+    janela.protocol("WM_DELETE_WINDOW", lambda: None)
 
     # def bloquear_teclas(event):
     #    return "break"
