@@ -1,5 +1,4 @@
 import keyboard
-import threading
 
 # Teclas únicas
 TECLAS_BLOQUEADAS = ["win", "esc", "alt", "tab", "ctrl", "shift"]

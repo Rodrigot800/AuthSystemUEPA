@@ -1,60 +1,27 @@
 import tkinter as tk
 from tkinter import messagebox
-from src.auth import autenticar_cliente
-
 from src.hardware import bloquear_teclas
+from src.network import login  # comunicação com o servidor
 
+BASE = "http://localhost:5000"  # Endereço do seu servidor Flask
 
 
 def iniciar_tela_login():
     janela = tk.Tk()
     janela.title("Sistema de Login - UEPA")
 
-    # ---------- TELA CHEIA REAL ----------
+    # ---------- TELA CHEIA ----------
     largura = janela.winfo_screenwidth()
     altura = janela.winfo_screenheight()
-    janela.geometry(f"{largura}x{altura}+0+0")  # Define o tamanho para a tela inteira
-    janela.overrideredirect(True)               # Remove barra de título e bordas
-    janela.attributes("-topmost", True)         # Sempre no topo
+    janela.geometry(f"{largura}x{altura}+0+0")
+    #janela.overrideredirect(True)
+    #janela.attributes("-topmost", True)
     janela.config(bg="#f5f6fa")
 
-    bloquear_teclas()
+    # ---------- BLOQUEIOS ----------
+    #bloquear_teclas()
+    #janela.protocol("WM_DELETE_WINDOW", lambda: None)
 
-     # ---------- BLOQUEIOS ----------
-    janela.protocol("WM_DELETE_WINDOW", lambda: None)
-
-    # def bloquear_teclas(event):
-    #    return "break"
-
-    # teclas_para_bloquear = [
-    #     "<Escape>", "<Shift_L>", "<Shift_R>",
-    #     "<Control_L>", "<Control_R>", "<Alt_L>", "<Alt_R>",
-    #     "<F1>", "<F2>", "<F3>", "<F4>", "<F5>", "<F6>",
-    #     "<F7>", "<F8>", "<F9>", "<F10>", "<F11>", "<F12>"
-    # ]
-
-    # for tecla in teclas_para_bloquear:
-    #     janela.bind_all(tecla, bloquear_teclas)
-
-    # Bloqueia as teclas Windows esquerda e direita
-    # keyboard.block_key("windows")
-    # keyboard.block_key("left windows")
-    # keyboard.block_key("right windows")
-
-    # Bloqueia combinações comuns como Win+R
-    # keyboard.add_hotkey('windows+r', lambda: None)
-    # keyboard.add_hotkey('windows+e', lambda: None)
-    # keyboard.add_hotkey('windows+d', lambda: None)
-    # keyboard.add_hotkey('windows+tab', lambda: None)
-
-    # Bloqueia Esc, Shift, Ctrl, F1-F12
-    # teclas = [
-    #     "esc", "ctrl", "alt",
-    #     "f1", "f2", "f3", "f4", "f5", "f6",
-    #     "f7", "f8", "f9", "f10", "f11", "f12"
-    # ]
-    # for tecla in teclas:
-    #     keyboard.block_key(tecla)
     # ---------- INTERFACE ----------
     titulo = tk.Label(
         janela,
@@ -78,6 +45,7 @@ def iniciar_tela_login():
     entrada_senha = tk.Entry(frame, width=30, font=("Segoe UI", 14), show="*")
     entrada_senha.grid(row=1, column=1, padx=5, pady=5)
 
+    # ---------- FUNÇÃO DE LOGIN ----------
     def tentar_login():
         usuario = entrada_login.get().strip()
         senha = entrada_senha.get().strip()
@@ -86,18 +54,17 @@ def iniciar_tela_login():
             messagebox.showwarning("Campos vazios", "Por favor, preencha todos os campos.")
             return
 
-        if autenticar_cliente(usuario, senha):
+        token = login(BASE, usuario, senha)
+
+        if token:
+            messagebox.showinfo("Sucesso", "✅ Acesso permitido!")
             janela.destroy()
+            from src.ui_sair import iniciar_tela_sair
+            iniciar_tela_sair(usuario)
         else:
             messagebox.showerror("Erro", "❌ Usuário ou senha incorretos.")
 
-        if autenticar_cliente(usuario, senha):
-            messagebox.showinfo("Sucesso", "✅ Acesso permitido!")
-        
-            from src.ui_sair import iniciar_tela_sair
-            iniciar_tela_sair(usuario)
-
-
+    # ---------- BOTÃO DE LOGIN ----------
     botao_login = tk.Button(
         janela,
         text="Entrar",
@@ -113,8 +80,13 @@ def iniciar_tela_login():
     )
     botao_login.pack(pady=40)
 
-    rodape = tk.Label(janela, text="© 2025 UEPA - Sistema de Login",
-                      font=("Segoe UI", 10), bg="#f5f6fa", fg="#718093")
+    rodape = tk.Label(
+        janela,
+        text="© 2025 UEPA - Sistema de Login",
+        font=("Segoe UI", 10),
+        bg="#f5f6fa",
+        fg="#718093"
+    )
     rodape.pack(side="bottom", pady=10)
 
     janela.mainloop()
